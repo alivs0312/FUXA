@@ -109,7 +109,8 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
         }
         this.isDeviceToEdit = !Device.isWebApiProperty(device);
         Object.values(this.devices).forEach(d => {
-            if (d.name === device.name) {
+            // Match by id so duplicate names (import) select the right device (#1337)
+            if (d.id === device.id) {
                 this.deviceSelected = d;
                 this.bindToTable(this.deviceSelected.tags);
             }

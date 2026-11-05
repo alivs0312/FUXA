@@ -38,4 +38,14 @@ assert.strictEqual(
     'unique name still valid'
 );
 
+
+const list = fs.readFileSync(
+    path.join(__dirname, '../device-list/device-list.component.ts'),
+    'utf8'
+);
+assert.ok(
+    /d\.id === device\.id/.test(list),
+    'device-list selects tags by device id, not name'
+);
+
 console.log('device-remove-duplicate-name: ok');
