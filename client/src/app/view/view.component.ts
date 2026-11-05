@@ -25,6 +25,7 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
     private viewName: string;
 
     private subscriptionLoad: Subscription;
+    private panZoomController: ReturnType<typeof panzoom> | null = null;
 
     constructor(private projectService: ProjectService,
         private route: ActivatedRoute,
@@ -58,6 +59,13 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
             if (this.subscriptionLoad) {
                 this.subscriptionLoad.unsubscribe();
             }
+            if (this.panZoomController) {
+                try {
+                    this.panZoomController.dispose();
+                } catch (e) {
+                }
+                this.panZoomController = null;
+            }
         } catch (e) {
         }
     }
@@ -77,7 +85,14 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
                 setTimeout(() => {
                     let element: HTMLElement = document.querySelector('#view');
                     if (element && panzoom) {
-                        panzoom(element, {
+                        if (this.panZoomController) {
+                            try {
+                                this.panZoomController.dispose();
+                            } catch (e) {
+                            }
+                            this.panZoomController = null;
+                        }
+                        this.panZoomController = panzoom(element, {
                             bounds: true,
                             boundsPadding: 0.05,
                         });

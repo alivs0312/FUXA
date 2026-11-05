@@ -83,6 +83,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     private subscriptionWriteUnauthorized: Subscription;
     private loginDialogRef: MatDialogRef<LoginComponent> = null;
     private destroy$ = new Subject<void>();
+    private panZoomController: ReturnType<typeof panzoom> | null = null;
+    private panZoomTimer: ReturnType<typeof setTimeout> | null = null;
     loggedUser$: Observable<User>;
     language$: Observable<LanguageConfiguration>;
     readonly defaultHeaderHeight = HeaderSettings.DefaultHeight;
@@ -178,6 +180,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
             this.destroy$.next(null);
             this.destroy$.complete();
             this.intervalsScript.clearIntervals();
+            this.disposePanZoom();
         } catch (e) {
         }
     }
@@ -476,12 +479,30 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
 
+    private disposePanZoom() {
+        if (this.panZoomTimer) {
+            clearTimeout(this.panZoomTimer);
+            this.panZoomTimer = null;
+        }
+        if (this.panZoomController) {
+            try {
+                this.panZoomController.dispose();
+            } catch (e) {
+            }
+            this.panZoomController = null;
+        }
+    }
+
     private checkZoom() {
+        // Dispose any previous panzoom before attaching another; stacking
+        // controllers on #home breaks click/wheel after view navigation (#482).
+        this.disposePanZoom();
         if (this.hmi.layout?.zoom && ZoomModeType[this.hmi.layout.zoom] === ZoomModeType.enabled) {
-            setTimeout(() => {
+            this.panZoomTimer = setTimeout(() => {
+                this.panZoomTimer = null;
                 let element: HTMLElement = document.querySelector('#home');
                 if (element && panzoom) {
-                    panzoom(element, {
+                    this.panZoomController = panzoom(element, {
                         bounds: true,
                         boundsPadding: 0.05,
                     });
