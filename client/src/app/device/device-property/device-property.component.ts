@@ -419,6 +419,10 @@ export class DevicePropertyComponent implements OnInit, OnDestroy {
 	}
 
 	isValid(device): boolean {
+		// Remove confirmation must not be blocked by a sibling with the same name (#1337)
+		if (this.isToRemove || this.data?.remove) {
+			return true;
+		}
 		if (!device.name || !device.type) {
 			return false;
 		}
