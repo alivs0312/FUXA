@@ -254,8 +254,8 @@ export class HtmlInputComponent extends GaugeBaseComponent {
                         setButton.addEventListener('touchstart', startButtonPress, { passive: false });
                         setButton.addEventListener('mouseup', resetButtonPress);
                         setButton.addEventListener('touchend', resetButtonPress);
-                        function startButtonPress(ev?: Event) {
-                            if (ev && typeof (ev as any).preventDefault === 'function') {
+                        function startButtonPress(ev?: MouseEvent | TouchEvent) {
+                            if (ev) {
                                 ev.preventDefault();
                             }
                             setButton.style.backgroundColor = 'rgba(0,0,0,0.2)';
