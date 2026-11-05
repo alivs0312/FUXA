@@ -47,7 +47,7 @@ function MODBUSclient(_data, _logger, _events, _runtime) {
                         logger.info(`'${data.name}' try to connect ${data.property.address}`, true);
                         _connect(function (err) {
                             if (err) {
-                                logger.error(`'${data.name}' connect failed! ${err}`);
+                                logger.error(`'${data.name}' connect failed! ${utils.getErrorMessage(err)}`);
                                 _emitStatus('connect-error');
                                 _clearVarsValue();
                                 reject();
@@ -69,7 +69,7 @@ function MODBUSclient(_data, _logger, _events, _runtime) {
                         _emitStatus('connect-error');
                     }
                 } catch (err) {
-                    logger.error(`'${data.name}' try to connect error! ${err}`);
+                    logger.error(`'${data.name}' try to connect error! ${utils.getErrorMessage(err)}`);
                     _checkWorking(false);
                     _emitStatus('connect-error');
                     _clearVarsValue();
@@ -135,7 +135,7 @@ function MODBUSclient(_data, _logger, _events, _runtime) {
 
             await this._polling()
         } catch (err) {
-            logger.error(`'${data.name}' polling! ${err}`);
+            logger.error(`'${data.name}' polling! ${utils.getErrorMessage(err)}`);
         } finally {
             if (!utils.isNullOrUndefined(socketRelease)) {
                 socketRelease()
@@ -152,7 +152,7 @@ function MODBUSclient(_data, _logger, _events, _runtime) {
                         readVarsfnc.push(await _readMemory(parseInt(tokenizedAddress.address), memory[memaddr].Start, memory[memaddr].MaxSize, Object.values(memory[memaddr].Items)));
                         readVarsfnc.push(await delay(data.property.delay || 10));
                     } catch (err) {
-                        logger.error(`'${data.name}' _readMemory error! ${err}`);
+                        logger.error(`'${data.name}' _readMemory error! ${utils.getErrorMessage(err)}`);
                     }
                 }
             } else {
@@ -161,7 +161,7 @@ function MODBUSclient(_data, _logger, _events, _runtime) {
                         readVarsfnc.push(await _readMemory(getMemoryAddress(parseInt(memaddr), false), mixItemsMap[memaddr].Start, mixItemsMap[memaddr].MaxSize, Object.values(mixItemsMap[memaddr].Items)));
                         readVarsfnc.push(await delay(data.property.delay || 10));
                     } catch (err) {
-                        logger.error(`'${data.name}' _readMemory error! ${err}`);
+                        logger.error(`'${data.name}' _readMemory error! ${utils.getErrorMessage(err)}`);
                     }
                 }
             }
@@ -242,7 +242,7 @@ function MODBUSclient(_data, _logger, _events, _runtime) {
                 memItemsMap[id].format = data.tags[id].format;
                 stepsMap[parseInt(data.tags[id].memaddress) + offset] = { size: datatypes[data.tags[id].type].WordLen, offset: offset };
             } catch (err) {
-                logger.error(`'${data.name}' load error! ${err}`);
+                logger.error(`'${data.name}' load error! ${utils.getErrorMessage(err)}`);
             }
         }
         // for fragmented
@@ -271,7 +271,7 @@ function MODBUSclient(_data, _logger, _events, _runtime) {
                 }
                 nextAdr = adr + stepsMap[key].size;
             } catch (err) {
-                logger.error(`'${data.name}' load error! ${err}`);
+                logger.error(`'${data.name}' load error! ${utils.getErrorMessage(err)}`);
             }
         });
         logger.info(`'${data.name}' data loaded (${count})`, true);
@@ -392,7 +392,7 @@ function MODBUSclient(_data, _logger, _events, _runtime) {
                 await _writeMemory(parseInt(memaddr), offset, val);
                 logger.info(`'${data.name}' setValue(${sigid}, ${value})`, true, true);
             } catch (err) {
-                logger.error(`'${data.name}' setValue error! ${err}`);
+                logger.error(`'${data.name}' setValue error! ${utils.getErrorMessage(err)}`);
                 return false;
             } finally {
                 _checkWorking(false);

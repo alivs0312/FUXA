@@ -418,6 +418,34 @@ var utils = module.exports = {
         return target;
     },
 
+    /**
+     * Format an error for log lines. Plain objects otherwise become "[object Object]".
+     * @param {*} err
+     * @returns {string}
+     */
+    getErrorMessage: function(err) {
+        if (err == null) {
+            return '';
+        }
+        if (typeof err === 'string') {
+            return err;
+        }
+        if (err instanceof Error) {
+            return err.message || String(err);
+        }
+        if (typeof err === 'object') {
+            if (typeof err.message === 'string' && err.message) {
+                return err.message;
+            }
+            try {
+                return JSON.stringify(err);
+            } catch (e) {
+                return Object.prototype.toString.call(err);
+            }
+        }
+        return String(err);
+    },
+
     generateSecretCode: function(byteLength = 32) {
         return crypto.randomBytes(byteLength).toString('hex');
     }
