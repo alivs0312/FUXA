@@ -479,6 +479,19 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
 
+    /** True when panzoom should ignore the gesture so the control can handle it. */
+    private isPanZoomInteractiveTarget(target: EventTarget | null): boolean {
+        const el = target as Element | null;
+        if (!el || typeof (el as Element).closest !== 'function') {
+            return false;
+        }
+        return !!el.closest(
+            'button, a, input, textarea, select, label, foreignObject, ' +
+            'mat-dialog-container, .cdk-overlay-container, .fab-card, .fab-iframe, ' +
+            '.mat-mdc-button, .mdc-button, .mat-button'
+        );
+    }
+
     private disposePanZoom() {
         if (this.panZoomTimer) {
             clearTimeout(this.panZoomTimer);
@@ -502,9 +515,13 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.panZoomTimer = null;
                 let element: HTMLElement = document.querySelector('#home');
                 if (element && panzoom) {
+                    // Skip pan/zoom when the gesture starts on a control so touch
+                    // clicks (HtmlButton, inputs, dialogs) still work (#449).
                     this.panZoomController = panzoom(element, {
                         bounds: true,
                         boundsPadding: 0.05,
+                        beforeMouseDown: (e) => this.isPanZoomInteractiveTarget(e.target),
+                        onTouch: (e) => !this.isPanZoomInteractiveTarget(e.target),
                     });
                 }
                 this.container.nativeElement.style.overflow = 'hidden';
