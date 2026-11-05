@@ -1,6 +1,6 @@
 import { Injectable, ViewContainerRef, ComponentFactoryResolver } from '@angular/core';
 
-import { GaugeSettings, Variable, GaugeStatus, Event, GaugeProperty } from '../../../_models/hmi';
+import { GaugeSettings, Variable, GaugeStatus, Event, GaugeProperty, GaugeAction, GaugeActionsType } from '../../../_models/hmi';
 import { GaugeDialogType } from '../../gauge-property/gauge-property.component';
 
 import { NgxSwitchComponent } from '../../../gui-helpers/ngx-switch/ngx-switch.component';
@@ -8,12 +8,15 @@ import { Utils } from '../../../_helpers/utils';
 import { GaugeBaseComponent } from '../../gauge-base/gauge-base.component';
 import { CheckPermissionFunction } from '../../../_services/auth.service';
 
+declare var SVG: any;
+
 @Injectable()
 export class HtmlSwitchComponent extends GaugeBaseComponent {
 
     static TypeTag = 'svg-ext-html_switch';
     static LabelTag = 'HtmlSwitch';
     static prefix = 'T-HXT_';
+    static actionsType = { hide: GaugeActionsType.hide, show: GaugeActionsType.show };
 
     constructor() {
         super();
@@ -39,8 +42,23 @@ export class HtmlSwitchComponent extends GaugeBaseComponent {
         return GaugeDialogType.Switch;
     }
 
+    static getActions(type: string) {
+        return this.actionsType;
+    }
+
     static isBitmaskSupported(): boolean {
         return true;
+    }
+
+    static processAction(act: GaugeAction, svgele: any, value: any, gaugeStatus: GaugeStatus) {
+        if (act.range.min <= value && act.range.max >= value) {
+            let element = SVG.adopt(svgele.node);
+            if (this.actionsType[act.type] === this.actionsType.hide) {
+                this.runActionHide(element, act.type, gaugeStatus);
+            } else if (this.actionsType[act.type] === this.actionsType.show) {
+                this.runActionShow(element, act.type, gaugeStatus);
+            }
+        }
     }
 
     static bindEvents(ga: GaugeSettings, slider?: NgxSwitchComponent, callback?: any): Event {
@@ -58,7 +76,8 @@ export class HtmlSwitchComponent extends GaugeBaseComponent {
 
     static processValue(ga: GaugeSettings, svgele: any, sig: Variable, gaugeStatus: GaugeStatus, switcher?: NgxSwitchComponent) {
         try {
-            if (switcher) {
+            const isActionOnlySignal = sig.id !== ga.property.variableId && ga.property.actions?.some(act => act.variableId === sig.id);
+            if (switcher && !isActionOnlySignal) {
                 let value = parseFloat(sig.value);
                 if (Number.isNaN(value)) {
                     // maybe boolean
@@ -73,6 +92,13 @@ export class HtmlSwitchComponent extends GaugeBaseComponent {
                                                                             (<GaugeProperty>ga.property).options.onValue);
                 }
                 switcher.setValue(value);
+            }
+            if (ga.property.actions) {
+                ga.property.actions.forEach(act => {
+                    if (act.variableId === sig.id) {
+                        HtmlSwitchComponent.processAction(act, svgele, parseFloat(sig.value), gaugeStatus);
+                    }
+                });
             }
         } catch (err) {
             console.error(err);
