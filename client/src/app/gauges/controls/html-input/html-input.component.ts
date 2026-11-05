@@ -198,7 +198,7 @@ export class HtmlInputComponent extends GaugeBaseComponent {
                         const max = parseFloat(gab.property.options.max);
                         input.addEventListener('keydown', (event: KeyboardEvent) => {
                             try {
-                                if (event.code === 'Enter' || event.code === 'NumpadEnter') {
+                                if (event.key === 'Enter' || event.code === 'Enter' || event.code === 'NumpadEnter') {
                                     const value = parseFloat(input.value);
                                     let warningMessage = '';
                                     if (min > value) {
@@ -249,11 +249,15 @@ export class HtmlInputComponent extends GaugeBaseComponent {
                         setButton.appendChild(icon);
                         input.parentElement.insertBefore(setButton, input);
 
+                        // Keep input focused so blur/restore does not cancel the confirm (#1063)
                         setButton.addEventListener('mousedown', startButtonPress);
-                        setButton.addEventListener('touchstart', startButtonPress);
+                        setButton.addEventListener('touchstart', startButtonPress, { passive: false });
                         setButton.addEventListener('mouseup', resetButtonPress);
                         setButton.addEventListener('touchend', resetButtonPress);
-                        function startButtonPress() {
+                        function startButtonPress(ev?: Event) {
+                            if (ev && typeof (ev as any).preventDefault === 'function') {
+                                ev.preventDefault();
+                            }
                             setButton.style.backgroundColor = 'rgba(0,0,0,0.2)';
                         }
                         function resetButtonPress() {
@@ -261,7 +265,12 @@ export class HtmlInputComponent extends GaugeBaseComponent {
                         }
 
                         setButton.addEventListener('click', function() {
-                            const enterKeyEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+                            const enterKeyEvent = new KeyboardEvent('keydown', {
+                                key: 'Enter',
+                                code: 'Enter',
+                                keyCode: 13,
+                                bubbles: true
+                            });
                             input.dispatchEvent(enterKeyEvent);
                         });
                     }
