@@ -920,12 +920,21 @@ export class FuxaViewComponent implements OnInit, AfterViewInit, OnDestroy {
             gaugesManager: this.gaugesManager,
             sourceDeviceId: options.sourceDeviceId
         };
+        // Offset stacked alarm/view dialogs so the latest is visible (#1017)
+        const stacked = this.fuxaDialog.openDialogs.filter(
+            (ref) => ref.componentInstance instanceof FuxaViewDialogComponent
+        ).length;
+        const offset = stacked * 28;
+        const position: { top: string; left?: string } = { top: (60 + offset) + 'px' };
+        if (offset) {
+            position.left = offset + 'px';
+        }
         let dialogRef = this.fuxaDialog.open(FuxaViewDialogComponent, {
             panelClass: 'fuxa-dialog-property',
             disableClose: true,
             data: dialogData,
             autoFocus: false,
-            position: { top: '60px' }
+            position
         });
         dialogRef.afterClosed().subscribe();
     }
