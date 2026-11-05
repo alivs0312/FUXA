@@ -896,6 +896,13 @@ export class FuxaViewComponent implements OnInit, AfterViewInit, OnDestroy {
         let view: View = await this.getView(viewref);
         this.closeAllCards();
         if (view) {
+            // When a parent (home / cards-view) listens to ongoto, promote "Open View"
+            // there so multiview / shell navigation replaces the whole page (#1696).
+            const needsLocalOptions = !!(options?.variablesMapping || options?.sourceDeviceId || param?.scaleMode);
+            if (!needsLocalOptions && this.ongoto?.observed) {
+                this.ongoto.emit(view.id);
+                return;
+            }
             if (options?.variablesMapping) {
                 this.loadVariableMapping(options.variablesMapping);
             }
