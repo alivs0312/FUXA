@@ -19,12 +19,13 @@
     </div>
 
     <app-fuxa-view (onclose)="onCloseCard(card)"
+                   (ongoto)="onCardOpenPage($event, card)"
                    [child]='true'
                    [gaugesManager]="gaugesManager"
                    [hmi]="hmi"
                    [parentcards]="cards"
-                   [variablesMapping]="card.variablesMapping"
                    [view]="card.view"
+                   [variablesMapping]="card.variablesMapping"
                    [sourceDeviceId]="card.sourceDeviceId">
     </app-fuxa-view>
 </div>

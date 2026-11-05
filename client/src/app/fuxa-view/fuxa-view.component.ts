@@ -927,7 +927,26 @@ export class FuxaViewComponent implements OnInit, AfterViewInit, OnDestroy {
             autoFocus: false,
             position: { top: '60px' }
         });
-        dialogRef.afterClosed().subscribe();
+        dialogRef.afterClosed().subscribe((result: { goto?: string } | undefined) => {
+            // Open Page inside a dialog closes it and navigates the host (#1960)
+            if (result?.goto) {
+                if (this.ongoto?.observed) {
+                    this.ongoto.emit(result.goto);
+                } else {
+                    void this.loadPage(null, result.goto, {});
+                }
+            }
+        });
+    }
+
+    /** Open Page from a movable card: dismiss the card and navigate (#1960). */
+    onCardOpenPage(viewId: string, card: any) {
+        this.onCloseCard(card);
+        if (this.ongoto?.observed) {
+            this.ongoto.emit(viewId);
+        } else {
+            void this.loadPage(null, viewId, {});
+        }
     }
 
     bringCardToFront(card: any) {

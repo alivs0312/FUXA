@@ -28,6 +28,11 @@ export class FuxaViewDialogComponent implements OnInit {
     onCloseDialog() {
         this.dialogRef.close();
     }
+
+    /** Open Page from inside the dialog: close and let the opener navigate (#1960). */
+    onGotoFromChild(viewId: string) {
+        this.dialogRef.close({ goto: viewId });
+    }
 }
 
 export interface FuxaViewDialogData {
