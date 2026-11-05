@@ -1320,6 +1320,7 @@
     "gauges.property-event-width": "Bredd",
     "gauges.property-event-height": "Höjd",
     "gauges.property-event-scale": "Skala",
+    "gauges.property-event-hideUrl": "Dölj URL",
     "gauges.property-event-script": "Skript",
     "gauges.property-event-script-param-name": "Parameter",
     "gauges.property-event-script-param-value": "Värde",

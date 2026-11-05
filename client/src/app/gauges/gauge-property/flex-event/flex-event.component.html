@@ -149,6 +149,10 @@
                 <span>{{'gauges.property-event-scale' | translate}}</span>
                 <input numberOnly [(ngModel)]="item.actoptions.scale" type="number" style="width: 60px">
             </div>
+            <div *ngIf="withScale(item.action)" class="my-form-field lbk ml10 tac" style="max-width: 70px">
+                <span>{{'gauges.property-event-hideUrl' | translate}}</span>
+                <mat-slide-toggle color="primary" [(ngModel)]="item.actoptions.hideUrl"></mat-slide-toggle>
+            </div>
             <div *ngIf="withPosition(item.action)" class="block mt5">
                 <div class="my-form-field">
                     <span>{{'general-x' | translate}}</span>

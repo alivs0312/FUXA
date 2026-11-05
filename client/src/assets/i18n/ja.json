@@ -1320,6 +1320,7 @@
     "gauges.property-event-width": "幅",
     "gauges.property-event-height": "高さ",
     "gauges.property-event-scale": "スケール",
+    "gauges.property-event-hideUrl": "URLを非表示",
     "gauges.property-event-script": "スクリプト",
     "gauges.property-event-script-param-name": "パラメータ",
     "gauges.property-event-script-param-value": "値",

@@ -1320,6 +1320,7 @@
     "gauges.property-event-width": "Genişlik",
     "gauges.property-event-height": "Yükseklik",
     "gauges.property-event-scale": "Ölçeklendirme",
+    "gauges.property-event-hideUrl": "URL gizle",
     "gauges.property-event-script": "Senaryo",
     "gauges.property-event-script-param-name": "Parametre",
     "gauges.property-event-script-param-value": "Değer",

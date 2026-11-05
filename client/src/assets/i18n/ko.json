@@ -1320,6 +1320,7 @@
     "gauges.property-event-width": "넓이",
     "gauges.property-event-height": "높이",
     "gauges.property-event-scale": "크기",
+    "gauges.property-event-hideUrl": "URL 숨기기",
     "gauges.property-event-script": "스크립트",
     "gauges.property-event-script-param-name": "매개변수",
     "gauges.property-event-script-param-value": "가치",

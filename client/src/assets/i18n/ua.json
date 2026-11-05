@@ -1320,6 +1320,7 @@
     "gauges.property-event-width": "Ширина",
     "gauges.property-event-height": "Висота",
     "gauges.property-event-scale": "Масштаб",
+    "gauges.property-event-hideUrl": "Приховати URL",
     "gauges.property-event-script": "Сценарій",
     "gauges.property-event-script-param-name": "Параметр",
     "gauges.property-event-script-param-value": "Значення",

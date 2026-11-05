@@ -1320,6 +1320,7 @@
     "gauges.property-event-width": "宽度",
     "gauges.property-event-height": "高度",
     "gauges.property-event-scale": "规模",
+    "gauges.property-event-hideUrl": "隐藏网址",
     "gauges.property-event-script": "脚本",
     "gauges.property-event-script-param-name": "参数",
     "gauges.property-event-script-param-value": "值",

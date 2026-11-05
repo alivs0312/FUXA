@@ -1321,6 +1321,7 @@
     "gauges.property-event-width": "Ширина",
     "gauges.property-event-height": "Высота",
     "gauges.property-event-scale": "Масштаб",
+    "gauges.property-event-hideUrl": "Скрыть URL",
     "gauges.property-event-script": "Скрипт",
     "gauges.property-event-script-param-name": "Параметр",
     "gauges.property-event-script-param-value": "Значение",

@@ -1320,6 +1320,7 @@
     "gauges.property-event-width": "Breite",
     "gauges.property-event-height": "Höhe",
     "gauges.property-event-scale": "Skala",
+    "gauges.property-event-hideUrl": "URL ausblenden",
     "gauges.property-event-script": "Skript",
     "gauges.property-event-script-param-name": "Parameter",
     "gauges.property-event-script-param-value": "Wert",

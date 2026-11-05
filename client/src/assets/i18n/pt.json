@@ -1328,6 +1328,7 @@
     "gauges.property-event-width": "Largura",
     "gauges.property-event-height": "Altura",
     "gauges.property-event-scale": "Escala",
+    "gauges.property-event-hideUrl": "Ocultar URL",
     "gauges.property-event-script": "Roteiro",
     "gauges.property-event-script-param-name": "Parâmetro",
     "gauges.property-event-script-param-value": "Valor",

@@ -1320,6 +1320,7 @@
     "gauges.property-event-width": "Largeur",
     "gauges.property-event-height": "Hauteur",
     "gauges.property-event-scale": "Échelle",
+    "gauges.property-event-hideUrl": "Masquer l'URL",
     "gauges.property-event-script": "Scénario",
     "gauges.property-event-script-param-name": "Paramètre",
     "gauges.property-event-script-param-value": "Évaluer",

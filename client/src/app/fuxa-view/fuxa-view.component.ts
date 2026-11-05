@@ -1016,6 +1016,7 @@ export class FuxaViewComponent implements OnInit, AfterViewInit, OnDestroy {
         iframe.scale = Utils.isNumeric(options.scale) ? parseFloat(options.scale) : 1;
         iframe.link = link;
         iframe.name = link;
+        iframe.hideUrl = !!options?.hideUrl;
         this.iframes.push(iframe);
         this.onIframeResizing(iframe, { size: { width: iframe.width, height: iframe.height } });
     }
@@ -1285,6 +1286,7 @@ export class CardModel {
     public view: View;
     public sourceDeviceId: string;
     disableDefaultClose: boolean;
+    hideUrl: boolean;
     zIndex: number;
 
     constructor(id: string) {
