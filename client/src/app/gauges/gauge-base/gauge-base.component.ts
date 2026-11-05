@@ -108,7 +108,14 @@ export class GaugeBaseComponent {
         if (!gaugeStatus.actionRef) {
             gaugeStatus.actionRef = new GaugeActionStatus(act.type);
         }
-        gaugeStatus.actionRef.type = act.type;
+        // Preserve rotate animr type when blink runs alongside (#1454)
+        if (!gaugeStatus.actionRef.animr) {
+            gaugeStatus.actionRef.type = act.type;
+        } else if (gaugeStatus.actionRef.spool) {
+            gaugeStatus.actionRef.spool.blinkType = act.type;
+        } else {
+            gaugeStatus.actionRef.spool = { blinkType: act.type };
+        }
         if (toEnable) {
             if (gaugeStatus.actionRef.timer &&
                 (GaugeBaseComponent.getBlinkActionId(act) === gaugeStatus.actionRef.spool?.actId)) {

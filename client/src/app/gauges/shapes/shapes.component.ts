@@ -129,32 +129,52 @@ export class ShapesComponent extends GaugeBaseComponent {
     }
 
     static runMyAction(element, type, gaugeStatus: GaugeStatus) {
-        if (gaugeStatus.actionRef && gaugeStatus.actionRef.type === type) {
+        // Blink and rotate share actionRef; allow both (timer + animr) (#1454)
+        const existing = gaugeStatus.actionRef;
+        const rotateType = existing?.spool?.rotateType ?? existing?.type;
+        if (existing?.animr && rotateType === type) {
             return;
         }
         if (element.timeline) {
             element.timeline().stop();
         }
-        if (gaugeStatus.actionRef?.animr) {
-            gaugeStatus.actionRef?.animr.unschedule();
+        if (existing?.animr) {
+            existing.animr.unschedule();
         }
         if (ShapesComponent.actionsType[type] === ShapesComponent.actionsType.clockwise) {
-            gaugeStatus.actionRef = ShapesComponent.startRotateAnimationShape(element, type, 360);
+            gaugeStatus.actionRef = ShapesComponent.startRotateAnimationShape(element, type, 360, existing);
         } else if (ShapesComponent.actionsType[type] === ShapesComponent.actionsType.anticlockwise) {
-            gaugeStatus.actionRef = ShapesComponent.startRotateAnimationShape(element, type, -360);
+            gaugeStatus.actionRef = ShapesComponent.startRotateAnimationShape(element, type, -360, existing);
         } else if (ShapesComponent.actionsType[type] === ShapesComponent.actionsType.stop) {
             ShapesComponent.stopAnimationShape(gaugeStatus, type);
         }
     }
 
-    static startRotateAnimationShape(element: any, type: string, angle: number): GaugeActionStatus {
-        return <GaugeActionStatus>{ type: type, animr: element.animate(3000).ease('-').rotate(angle).loop() };
+    static startRotateAnimationShape(element: any, type: string, angle: number, existing?: GaugeActionStatus): GaugeActionStatus {
+        const status = <GaugeActionStatus>{
+            type: type,
+            animr: element.animate(3000).ease('-').rotate(angle).loop(),
+            timer: existing?.timer ?? null,
+            spool: { ...(existing?.spool || {}), rotateType: type }
+        };
+        return status;
     }
 
     static stopAnimationShape(gaugeStatus: GaugeStatus, type: string) {
         if (gaugeStatus.actionRef) {
-            ShapesComponent.clearAnimationTimer(gaugeStatus.actionRef);
-            gaugeStatus.actionRef.type = type;
+            if (gaugeStatus.actionRef.animr) {
+                try {
+                    gaugeStatus.actionRef.animr.unschedule();
+                } catch (e) { }
+                gaugeStatus.actionRef.animr = null;
+            }
+            if (gaugeStatus.actionRef.spool) {
+                delete gaugeStatus.actionRef.spool.rotateType;
+            }
+            // Keep blink timer; only mark rotate as stopped
+            if (!gaugeStatus.actionRef.timer) {
+                gaugeStatus.actionRef.type = type;
+            }
         }
     }
 

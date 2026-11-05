@@ -137,19 +137,23 @@ export class ApeShapesComponent extends GaugeBaseComponent {
     }
 
     static runMyAction(element, type, gaugeStatus: GaugeStatus) {
-        if (gaugeStatus.actionRef && gaugeStatus.actionRef.type === type) {
+        const existing = gaugeStatus.actionRef;
+        const rotateType = existing?.spool?.rotateType ?? existing?.type;
+        if (existing?.animr && rotateType === type
+            && (ApeShapesComponent.actionsType[type] === ApeShapesComponent.actionsType.clockwise
+                || ApeShapesComponent.actionsType[type] === ApeShapesComponent.actionsType.anticlockwise)) {
             return;
         }
         if (element.timeline) {
             element.timeline().stop();
         }
-        if (gaugeStatus.actionRef?.animr?.unschedule instanceof Function) {
-            gaugeStatus.actionRef?.animr.unschedule();
+        if (existing?.animr?.unschedule instanceof Function) {
+            existing.animr.unschedule();
         }
         if (ApeShapesComponent.actionsType[type] === ApeShapesComponent.actionsType.clockwise) {
-            gaugeStatus.actionRef = ShapesComponent.startRotateAnimationShape(element, type, 360);
+            gaugeStatus.actionRef = ShapesComponent.startRotateAnimationShape(element, type, 360, existing);
         } else if (ApeShapesComponent.actionsType[type] === ApeShapesComponent.actionsType.anticlockwise) {
-            gaugeStatus.actionRef = ShapesComponent.startRotateAnimationShape(element, type, -360);
+            gaugeStatus.actionRef = ShapesComponent.startRotateAnimationShape(element, type, -360, existing);
         } else if (ApeShapesComponent.actionsType[type] === ApeShapesComponent.actionsType.downup) {
             let eletoanim = Utils.searchTreeStartWith(element.node, 'pm');
             if (eletoanim) {
