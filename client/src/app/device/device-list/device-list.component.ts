@@ -73,6 +73,18 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
     ngAfterViewInit() {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+        // Re-subscribe when the visible page/filter/sort changes (#1549)
+        if (this.paginator) {
+            this.paginator.page.subscribe(() => this.subscribeVisibleTags());
+        }
+        if (this.sort) {
+            this.sort.sortChange.subscribe(() => {
+                if (this.paginator) {
+                    this.paginator.firstPage();
+                }
+                this.subscribeVisibleTags();
+            });
+        }
     }
 
     mapTags() {
@@ -92,7 +104,27 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
             tags = {};
         }
         this.dataSource.data = Object.values(tags);
-        this.hmiService.viewsTagsSubscribe(Object.keys(tags));
+        // Only live-update the current page (not thousands of tags) (#1549)
+        this.subscribeVisibleTags();
+    }
+
+    /**
+     * Subscribe socket updates for tags shown on the current table page only.
+     */
+    private subscribeVisibleTags() {
+        const filtered = this.dataSource.filteredData?.length
+            ? this.dataSource.filteredData
+            : (this.dataSource.data || []);
+        let ordered = filtered;
+        if (this.dataSource.sort && this.sort?.active) {
+            ordered = this.dataSource.sortData(filtered.slice(), this.dataSource.sort);
+        }
+        const pageSize = this.paginator?.pageSize || 25;
+        const pageIndex = this.paginator?.pageIndex || 0;
+        const start = pageIndex * pageSize;
+        const visible = ordered.slice(start, start + pageSize);
+        const ids = visible.map((t: Tag) => t.id).filter(Boolean);
+        this.hmiService.viewsTagsSubscribe(ids, true);
     }
 
     onDeviceChange(source) {
@@ -186,6 +218,10 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
         filterValue = filterValue.trim(); // Remove whitespace
         filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
         this.dataSource.filter = filterValue;
+        if (this.paginator) {
+            this.paginator.firstPage();
+        }
+        this.subscribeVisibleTags();
     }
 
     /** Edit the tag */
