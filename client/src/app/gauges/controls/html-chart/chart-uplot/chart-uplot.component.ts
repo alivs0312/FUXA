@@ -646,14 +646,30 @@ export class ChartUplotComponent implements OnInit, AfterViewInit, OnDestroy {
                 title.style.display = 'none';
             }
         }
+        const bg = this.options.colorBackground;
+        // Keep legend strip / uPlot root in sync with the configured chart background (#1136)
+        if (bg && (this.options.legendBackground === undefined
+            || this.options.legendBackground === 'rgba(255,255,255,0)'
+            || this.options.legendBackground === 'transparent')) {
+            this.options.legendBackground = bg;
+        }
         let legend = this.chartPanel.nativeElement.querySelector('.u-legend');
         if (legend) {
             if (this.options.axisLabelColor) {
                 legend.style.color = this.options.axisLabelColor;
             }
             legend.style.lineHeight = 0;
+            legend.style.backgroundColor = this.options.legendBackground || bg || '';
         }
-        this.chartPanel.nativeElement.style.backgroundColor = this.options.colorBackground;
+        this.chartPanel.nativeElement.style.backgroundColor = bg || '';
+        const uplotRoot = this.chartPanel.nativeElement.querySelector('.uplot');
+        if (uplotRoot) {
+            uplotRoot.style.backgroundColor = bg || '';
+        }
+        const host = this.chartPanel.nativeElement.parentElement;
+        if (host) {
+            host.style.backgroundColor = bg || '';
+        }
     }
 
     private getCustomData() {
