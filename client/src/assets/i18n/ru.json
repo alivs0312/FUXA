@@ -1338,6 +1338,7 @@
     "gauges.property-input-max": "Макс",
     "gauges.property-input-color": "Заливка",
     "gauges.property-input-stroke": "Обводка",
+    "gauges.property-input-stroke-width": "Толщина обводки",
     "gauges.property-input-value": "Значение",
     "gauges.property-input-label": "Метка",
     "gauges.property-input-unit": "Единица измерения",

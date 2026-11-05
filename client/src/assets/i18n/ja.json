@@ -1337,6 +1337,7 @@
     "gauges.property-input-max": "最大値",
     "gauges.property-input-color": "塗りつぶし",
     "gauges.property-input-stroke": "ストローク",
+    "gauges.property-input-stroke-width": "ストローク幅",
     "gauges.property-input-value": "値",
     "gauges.property-input-label": "ラベル",
     "gauges.property-input-unit": "単位",

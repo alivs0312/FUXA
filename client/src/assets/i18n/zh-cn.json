@@ -1337,6 +1337,7 @@
     "gauges.property-input-max": "最大",
     "gauges.property-input-color": "填充",
     "gauges.property-input-stroke": "描边",
+    "gauges.property-input-stroke-width": "描边宽度",
     "gauges.property-input-value": "值",
     "gauges.property-input-label": "标签",
     "gauges.property-input-unit": "单位",

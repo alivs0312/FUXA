@@ -1337,6 +1337,7 @@
     "gauges.property-input-max": "Max",
     "gauges.property-input-color": "Füllfarbe",
     "gauges.property-input-stroke": "Konturfarbe",
+    "gauges.property-input-stroke-width": "Konturstärke",
     "gauges.property-input-value": "Wert",
     "gauges.property-input-label": "Bezeichnung",
     "gauges.property-input-unit": "Einheit",

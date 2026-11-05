@@ -276,10 +276,20 @@ export class HtmlInputComponent extends GaugeBaseComponent {
                     fobj[0].style.paddingLeft = '1px';
                 }
 
-                // Set the border on the surrounding svg rect
+                // Surrounding svg rect stroke (#953): honor options.strokeWidth
+                // (0 = no stroke). Default remains 0.5 when unset.
                 let rects = ele.getElementsByTagName('rect');
-                if (rects) {
-                    rects[0].setAttribute('stroke-width', '0.5');
+                if (rects?.length) {
+                    const raw = gab.property?.options?.strokeWidth;
+                    const sw = (raw === 0 || raw === '0')
+                        ? 0
+                        : (raw === undefined || raw === null || raw === ''
+                            ? 0.5
+                            : Number(raw));
+                    rects[0].setAttribute('stroke-width', String(Number.isFinite(sw) ? sw : 0.5));
+                    if (sw === 0) {
+                        rects[0].setAttribute('stroke', 'none');
+                    }
                 }
             }
         }

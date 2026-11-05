@@ -1337,6 +1337,7 @@
     "gauges.property-input-max": "Max",
     "gauges.property-input-color": "Dolgu",
     "gauges.property-input-stroke": "Kenarlık",
+    "gauges.property-input-stroke-width": "Kenarlık kalınlığı",
     "gauges.property-input-value": "Değer",
     "gauges.property-input-label": "Etiket",
     "gauges.property-input-unit": "Birim",

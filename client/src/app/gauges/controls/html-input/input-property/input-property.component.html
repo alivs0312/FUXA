@@ -98,6 +98,11 @@
                                     <span>{{'gauges.property-select-content-on-click' | translate}}</span>
                                     <mat-slide-toggle color="primary" [(ngModel)]="property.options.selectOnClick" class="ml20"></mat-slide-toggle>
                                 </div>
+                                <div class="my-form-field ml20" style="width: 100px;">
+                                    <span>{{'gauges.property-input-stroke-width' | translate}}</span>
+                                    <input numberOnly [(ngModel)]="property.options.strokeWidth" type="number" min="0" step="0.5" style="width: 80px"
+                                           placeholder="0.5">
+                                </div>
                                 <div class="my-form-field ml20" style="width: 140px;">
                                     <span>{{'gauges.property-input-esc-action' | translate}}</span>
                                     <mat-select [(ngModel)]="property.options.actionOnEsc">

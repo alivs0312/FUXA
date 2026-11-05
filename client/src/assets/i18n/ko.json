@@ -1337,6 +1337,7 @@
     "gauges.property-input-max": "최댓값",
     "gauges.property-input-color": "채우기",
     "gauges.property-input-stroke": "선",
+    "gauges.property-input-stroke-width": "선 두께",
     "gauges.property-input-value": "값",
     "gauges.property-input-label": "라벨",
     "gauges.property-input-unit": "단위",

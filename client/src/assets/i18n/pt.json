@@ -1345,6 +1345,7 @@
     "gauges.property-input-max": "Max",
     "gauges.property-input-color": "Preenchimento",
     "gauges.property-input-stroke": "Grossura",
+    "gauges.property-input-stroke-width": "Espessura do traço",
     "gauges.property-input-value": "Valor",
     "gauges.property-input-label": "Etiqueta",
     "gauges.property-input-unit": "Unidade",

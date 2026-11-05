@@ -1337,6 +1337,7 @@
     "gauges.property-input-max": "Max",
     "gauges.property-input-color": "Remplir",
     "gauges.property-input-stroke": "Contour",
+    "gauges.property-input-stroke-width": "Épaisseur du contour",
     "gauges.property-input-value": "Valeur",
     "gauges.property-input-label": "Label",
     "gauges.property-input-unit": "Unité",
